@@ -15,8 +15,9 @@ public class SearchTest {
         Document doc = conn.get();
         //Retrieving the contents (body) of the web page
         String result = doc.body().text();
-        //System.out.println(result);
-        result=result.substring(result.indexOf("First, select"));
+        System.out.println(result);
+        result=result.substring(result.lastIndexOf("View All"));
+
         result=result.substring(0,result.lastIndexOf("Add to Cart"));
 
         ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
@@ -38,26 +39,33 @@ public class SearchTest {
             if(sword.equals("Add")||sword.equals("Shop")){
                 go=false;
                 sword="";
+                info=info.substring(1);
+                if (info.substring(0).equals("#")) {
+                    info.substring(1);
+                }
                 data.get(0).add(info);
                 info="";
                 step=0;
             }
+            if(sword.equals("Model")){
+                i+=8;
+                sword="";
+            }
             if(ch.equals(")")||go){
-                if(step>15){
 
-                    sword+=ch;
-                    if(ch.equals(" ")){
+                sword+=ch;
+                if(ch.equals(" ")){
 
-                        info+=sword;
-                        sword="";
+                    info+=sword;
+                    sword="";
 
-                    }
                 }
 
-                go=true;
-                step++;
-            }
 
+                go=true;
+
+            }
+            step++;
         }
         //add price
         go=false;
@@ -79,6 +87,7 @@ public class SearchTest {
         step=0;
         for (int i=0;i<result.length();i++){
             String ch=result.substring(i,i+1);
+
             if(step==15){
                 go=false;
                 data.get(2).add(info);
@@ -106,7 +115,7 @@ public class SearchTest {
         Document doc = conn.get();
         //Retrieving the contents (body) of the web page
         String result = doc.body().text();
-        System.out.println(result);
+        //System.out.println(result);
 
         result=result.substring(result.indexOf("Compare")+1);
         result=result.substring(result.indexOf("Compare"));
@@ -131,7 +140,7 @@ public class SearchTest {
                 go=true;
                 info+=ch;
             }
-            if(sword.equals("Reviews")) {
+            if(sword.equals("Reviews")||sword.equals("Review")) {
                 go = false;
                 info=info.substring(0,info.length()-11);
                 data.get(0).add(info);
